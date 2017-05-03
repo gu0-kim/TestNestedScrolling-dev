@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="header_height">460dp</dimen>
+    <dimen name="header_pic_height">260dp</dimen>
+    <dimen name="height_min_pull">60dp</dimen>
+    <dimen name="header_ouside_screen_height">-200dp</dimen>
+    <dimen name="header_pull_height">200dp</dimen>
+    <!--drag view dimens-->
+    <dimen name="drag_header_height">260dp</dimen>
+    <!--<dimen name="drag_topbar_height">48dp</dimen>-->
+    <dimen name="drag_middlebar_height">40dp</dimen>
+    <!--拖动开始刷新的最小距离-->
+    <dimen name="drag_refresh_min_distance">48dp</dimen>
+    
+</resources>

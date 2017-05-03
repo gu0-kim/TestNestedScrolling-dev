@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<level-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:drawable="@drawable/nav_back_trbg_sel"
+        android:maxLevel="0"/>
+    <item
+        android:drawable="@drawable/nav_back_whitebg_sel"
+        android:maxLevel="1"/>
+</level-list>

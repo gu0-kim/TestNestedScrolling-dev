@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.project.gu.testnestedscrollingfirst.MyParent
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#123456"
+    tools:context="com.project.gu.testnestedscrollingfirst.MainActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:src="@mipmap/ic_launcher_round"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFB6C1"
+        android:text="我是不会隐藏的文字栏，辣鸡"
+        android:textSize="25sp"/>
+
+    <com.project.gu.testnestedscrollingfirst.MyChild
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/libai"
+            android:background="#456789"
+            android:textSize="25sp"/>
+
+    </com.project.gu.testnestedscrollingfirst.MyChild>
+
+</com.project.gu.testnestedscrollingfirst.MyParent>

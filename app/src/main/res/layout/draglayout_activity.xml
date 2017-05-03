@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.project.gu.testnestedscrollingfirst.content.dragrefresh.DragRefreshNestedScrollingLayout
+    android:id="@+id/dragview"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#eeeeee"
+    app:refreshMinHeight="@dimen/drag_refresh_min_distance">
+
+    <ImageView
+        android:id="@+id/bgImg"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/drag_header_height"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/visitor_me_cover"/>
+
+    <LinearLayout
+        android:id="@+id/contentView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/userBtnLayout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/drag_header_height"
+            android:background="#00000000">
+
+            <ImageView
+                android:id="@+id/userheaderImg"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_centerInParent="true"
+                android:src="@mipmap/ic_launcher"/>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/middleBar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/drag_middlebar_height"
+            android:background="#ffffff"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="第一页"
+                android:textColor="@color/colorAccent"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="第二页"
+                android:textColor="@color/colorAccent"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="第三页"
+                android:textColor="@color/colorAccent"/>
+        </LinearLayout>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/vp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#123456"/>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@drawable/nav_level_bg">
+
+        <ImageView
+            android:id="@+id/navBackImg"
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:scaleType="centerInside"
+            android:src="@drawable/nav_back_level_bg"/>
+
+
+        <ImageView
+            android:id="@+id/pbImg"
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:scaleType="centerInside"
+            android:src="@drawable/top_more_bg"/>
+
+        <ImageView
+            android:id="@+id/searchImg"
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@id/pbImg"
+            android:scaleType="centerInside"
+            android:src="@drawable/nav_search_level"/>
+    </RelativeLayout>
+
+</com.project.gu.testnestedscrollingfirst.content.dragrefresh.DragRefreshNestedScrollingLayout>
