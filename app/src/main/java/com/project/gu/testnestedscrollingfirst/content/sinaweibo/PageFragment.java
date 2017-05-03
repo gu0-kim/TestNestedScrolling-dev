@@ -80,7 +80,6 @@ public class PageFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         headerHeight = getResources().getDimensionPixelSize(R.dimen.drag_header_height);
         rv = (RefreshRecyclerView) inflater.inflate(R.layout.fragment_pager, container, false);
         list = new ArrayList<>();
@@ -88,68 +87,10 @@ public class PageFragment extends Fragment {
             list.add(String.valueOf(i));
         }
         rv.setAdapter(new RefreshAdapter(getContext(), list, rv));
-        //        rv.setNotifyListener(this);
-        //        rv.setLayoutManager(new LinearLayoutManager(getContext()));
-        //        rv.addOnScrollListener(new ScrollListener());
         return rv;
     }
 
     boolean isDragging;
-
-    //    @Override
-    //    public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-    //        log("onScrolled");
-    //        if (moveTopView) {
-    //            if (dy > 0) {
-    //                /**
-    //                 *向下滚动,手向上滑动
-    //                 */
-    //                if (coordinatorUp()) {
-    //                    notifyScrollBy(dy);
-    //                }
-    //            } else if (dy <= 0) {
-    //                /**
-    //                 * 当recyclerview不能向下滚动时，顶部view向下移动
-    //                 */
-    //                if (coordinatorDown()) {
-    //                    notifyScrollBy(dy);
-    //                }
-    //
-    //            }
-    //        }
-    //    }
-    //
-    //    @Override
-    //    public void onPull(int offset) {
-    //        ViewGroup.LayoutParams p = topView.getLayoutParams();
-    //        if (p.height != headerHeight + offset) {
-    //            p.height = headerHeight + offset;
-    //            topView.setLayoutParams(p);
-    //        }
-    //    }
-
-    /**
-     * 顶部view是否可折叠收起
-     */
-    private boolean coordinatorUp() {
-        LinearLayoutManager layoutManager = (LinearLayoutManager) rv.getLayoutManager();
-        //        View firstVisibItem = rv.getChildAt(0);
-        //        int firstItemBottom = layoutManager.getDecoratedBottom(firstVisibItem);
-        int firstItemPosition = layoutManager.findFirstVisibleItemPosition();
-        return firstItemPosition < 2;
-    }
-
-    /**
-     * 内部可滚动组件是否可以向上滚动
-     */
-    private boolean coordinatorDown() {
-        LinearLayoutManager layoutManager = (LinearLayoutManager) rv.getLayoutManager();
-        View firstVisibItem = rv.getChildAt(0);
-        int firstItemBottom = layoutManager.getDecoratedBottom(firstVisibItem);
-        int firstItemPosition = layoutManager.findFirstVisibleItemPosition();
-        return firstItemPosition == 1 && firstItemBottom >= 0;
-    }
-
 
     public int getTopViewBottom() {
         LinearLayoutManager layoutManager = (LinearLayoutManager) rv.getLayoutManager();
@@ -163,37 +104,6 @@ public class PageFragment extends Fragment {
             return 0;
         }
     }
-
-    private boolean topViewNeedScale() {
-        return true;
-    }
-
-    /**
-     * 顶部view执行滚动dy,TOP最多到-headerHeight
-     */
-    private void topViewScrollBy(int dy) {
-        int bottom = topView.getBottom();
-        int dstBottom = bottom - dy;
-        if (dstBottom >= 0 && dstBottom <= headerHeight + HEADEROUT) {
-            topView.offsetTopAndBottom(-dy);
-            //            log("notifyScrollBy(+" + dy + ")");
-            //            notifyScrollBy(dy);
-        } else if (dstBottom < 0) {
-            log("向上滚过了，回调");
-            topView.layout(0, -headerHeight, topView.getMeasuredWidth(), 0);
-            if (dstBottom + headerHeight != 0) {
-                //                notifyScrollBy(dstBottom + headerHeight);
-            }
-        } else if (dstBottom > headerHeight + HEADEROUT) {
-            log("向下滚过了，回调");
-            if (topView.getHeight() <= headerHeight)
-                topView.layout(0, HEADEROUT, topView.getMeasuredWidth(), headerHeight + HEADEROUT);
-            if (dstBottom - HEADEROUT != 0) {
-                //                notifyScrollBy(dstBottom - HEADEROUT);
-            }
-        }
-    }
-
 
     private void notifyScrollBy(int dy) {
         FragmentPagerAdapter adapter = (FragmentPagerAdapter) vp.getAdapter();
@@ -238,14 +148,14 @@ public class PageFragment extends Fragment {
         }
     }
 
-    class HeaderHolder extends RecyclerView.ViewHolder {
-        public HeaderHolder(View itemView) {
+    private class HeaderHolder extends RecyclerView.ViewHolder {
+        HeaderHolder(View itemView) {
             super(itemView);
         }
     }
 
-    class ItemHolder extends RecyclerView.ViewHolder {
-        public ItemHolder(View itemView) {
+    private class ItemHolder extends RecyclerView.ViewHolder {
+        ItemHolder(View itemView) {
             super(itemView);
         }
     }

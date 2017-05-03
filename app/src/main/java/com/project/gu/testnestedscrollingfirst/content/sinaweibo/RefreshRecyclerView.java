@@ -70,9 +70,6 @@ public class RefreshRecyclerView extends RecyclerView {
                 if (isPullState(offset)) {
                     updateState(offset);
                     updateHeader(offset);
-                    if (listener != null) {
-                        //                        listener.onPull(Math.min(offset, mHeaderInitHeight - 1));
-                    }
                 }
                 break;
             case MotionEvent.ACTION_UP:
@@ -126,19 +123,6 @@ public class RefreshRecyclerView extends RecyclerView {
         return mState.equals(State.LOADING);
     }
 
-
-    public interface NotifyScrollListener {
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy);
-
-        public void onPull(int offset);
-    }
-
-    private NotifyScrollListener listener;
-
-    public void setNotifyListener(NotifyScrollListener listener) {
-        this.listener = listener;
-    }
-
     private class Scrolllistener extends OnScrollListener {
         @Override
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -177,9 +161,6 @@ public class RefreshRecyclerView extends RecyclerView {
         super.computeScroll();
         if (mScroller.computeScrollOffset()) {
             updateHeader(mScroller.getCurrY());
-            if (listener != null) {
-                //                listener.onPull(mScroller.getCurrY());
-            }
             invalidate();
         }
     }

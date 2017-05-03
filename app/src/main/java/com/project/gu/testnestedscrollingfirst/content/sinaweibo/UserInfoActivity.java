@@ -54,6 +54,9 @@ public class UserInfoActivity extends AppCompatActivity {
                     startScroll = false;
                 }
 
+                /*
+                滚动结束时隐藏顶部
+                 */
                 if (positionOffset == 0.0f) {
                     getTopView().setVisibility(View.INVISIBLE);
                     startScroll = true;
@@ -62,7 +65,6 @@ public class UserInfoActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                log("onPageSelected ----");
                 getTopView().setVisibility(View.INVISIBLE);
             }
 
