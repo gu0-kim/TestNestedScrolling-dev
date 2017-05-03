@@ -78,6 +78,7 @@ public class UserInfoActivity extends AppCompatActivity {
         int neighboursBottom = neighboursFragment.getTopViewBottom();
         int selfBottom = selfFragment.getTopViewBottom();
         int dy = neighboursBottom - selfBottom;
+        log("----needScrollBy dy= " + dy);
         neighboursFragment.needScrollBy(dy);
     }
 
