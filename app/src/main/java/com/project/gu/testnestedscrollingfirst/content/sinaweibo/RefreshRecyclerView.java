@@ -8,7 +8,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
-import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.Scroller;
 
@@ -25,10 +25,12 @@ public class RefreshRecyclerView extends RecyclerView {
 
     private State mState = State.PULL;
     private static final int REFRESH_MIN_DY = 160;
+    //    private static final int HEADER_IN_SCREEN = 1;
     private int mHeaderInitHeight;
     private ViewGroup mRefreshHeader;
     LinearLayoutManager mLayoutManager;
     private Scroller mScroller;
+    private int mTouchslop;
 
     public RefreshRecyclerView(Context context) {
         super(context);
@@ -38,38 +40,47 @@ public class RefreshRecyclerView extends RecyclerView {
         super(context, attrs);
         init(context);
         addOnScrollListener(new Scrolllistener());
+        mTouchslop = ViewConfiguration.get(context).getScaledTouchSlop();
+        log("mtouchslop= " + mTouchslop);
     }
 
 
     private boolean mIsRecord;
-    private int mStartY;
+    private int mStartY, mStartX;
     private int mFirstItemIndex;
 
     @Override
     public boolean onTouchEvent(MotionEvent e) {
         switch (e.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                if (!mIsRecord && mFirstItemIndex == 0) {
-                    mStartY = (int) e.getY();
-                    mIsRecord = true;
+                Log.e("TAG", "log----(down)----");
+                if (needRecord()) {
+                    recordStart(e);
                 }
                 break;
             case MotionEvent.ACTION_MOVE:
-                if (!mIsRecord && mFirstItemIndex == 0) {
-                    mStartY = (int) e.getY();
-                    mIsRecord = true;
+                if (needRecord()) {
+                    recordStart(e);
                 }
                 if (!mIsRecord || mState == State.LOADING) {
                     break;
                 }
-                final int offset = (int) e.getY() - mStartY;
-                if (offset < 0) {
+                final int offsetY = (int) e.getY() - mStartY;
+                final int offsetX = (int) e.getX() - mStartX;
+                if (offsetY < 0) {
                     mIsRecord = false;
                     break;
                 }
-                if (isPullState(offset)) {
-                    updateState(offset);
-                    updateHeader(offset);
+                if (Math.abs(offsetY) > Math.abs(offsetX)) {
+                    if (Math.abs(offsetY) > mTouchslop) {
+                        getParent().requestDisallowInterceptTouchEvent(true);
+                    }
+                }
+
+                if (isPull(offsetY) && !isAnim()) {
+                    //                        log("----mStartY= (" + mStartY + "),offsetY= (" + offsetY + ")");
+                    updateState(offsetY);
+                    updateHeader(offsetY);
                 }
                 break;
             case MotionEvent.ACTION_UP:
@@ -77,7 +88,7 @@ public class RefreshRecyclerView extends RecyclerView {
                     mIsRecord = false;
                     break;
                 }
-                if (mIsRecord && mState != State.IDLE && mState != State.LOADING) {
+                if (mIsRecord && mState != State.IDLE) {
                     log("-----headerResetAnim-----");
                     headerResetAnim();
                 }
@@ -87,23 +98,44 @@ public class RefreshRecyclerView extends RecyclerView {
         return super.onTouchEvent(e);
     }
 
-    private void updateHeader(int offset) {
-        mRefreshHeader.setPadding(0, Math.min(offset - mHeaderInitHeight + 1, 0), 0, 0);
+    private boolean needRecord() {
+        return !mIsRecord && mFirstItemIndex == 0 && mRefreshHeader.getHeight() >= mHeaderInitHeight && mRefreshHeader.getTop() >= 0;
     }
 
-    private int getHeaderPaddingTop() {
-        return mRefreshHeader.getPaddingTop();
+    private void recordStart(MotionEvent e) {
+        mStartY = (int) e.getY();
+        mStartX = (int) e.getX();
+        mIsRecord = true;
+    }
+
+    private void updateHeader(int offset) {
+        ViewGroup.LayoutParams params = mRefreshHeader.getLayoutParams();
+        params.height = mHeaderInitHeight + offset;
+        mRefreshHeader.setLayoutParams(params);
+    }
+
+    private void setHeaderHeight(int height) {
+        ViewGroup.LayoutParams params = mRefreshHeader.getLayoutParams();
+        params.height = height;
+        mRefreshHeader.setLayoutParams(params);
     }
 
     private void headerReset() {
-        mRefreshHeader.setPadding(0, -mHeaderInitHeight + 1, 0, 0);
+        ViewGroup.LayoutParams params = mRefreshHeader.getLayoutParams();
+        params.height = mHeaderInitHeight;
+        mRefreshHeader.setLayoutParams(params);
+        //        mRefreshHeader.setPadding(0, -mHeaderInitHeight + HEADER_IN_SCREEN, 0, 0);
     }
 
     private void headerResetAnim() {
         if (mScroller.isFinished()) {
-            mScroller.startScroll(0, mRefreshHeader.getHeight(), 0, -mRefreshHeader.getHeight() + 1, 1000);
+            mScroller.startScroll(0, mRefreshHeader.getHeight(), 0, -mRefreshHeader.getHeight() + mHeaderInitHeight, 500);
             invalidate();
         }
+    }
+
+    private boolean isAnim() {
+        return !mScroller.isFinished();
     }
 
 
@@ -115,12 +147,9 @@ public class RefreshRecyclerView extends RecyclerView {
         }
     }
 
-    private boolean isPullState(int offset) {
+    private boolean isPull(int offset) {
+        log("mRefreshHeader.getHeight()= " + mRefreshHeader.getHeight());
         return mFirstItemIndex == 0 && offset >= 0;
-    }
-
-    private boolean isLoading() {
-        return mState.equals(State.LOADING);
     }
 
     private class Scrolllistener extends OnScrollListener {
@@ -139,16 +168,17 @@ public class RefreshRecyclerView extends RecyclerView {
     private void init(Context context) {
         mScroller = new Scroller(context);
         setLayoutManager(new LinearLayoutManager(context));
-        mRefreshHeader = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.rv_refresh_header, this, false);
+        mRefreshHeader = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.userinfo_header_layout, this, false);
         mearsureHeader(mRefreshHeader);
         mHeaderInitHeight = mRefreshHeader.getMeasuredHeight();
-        headerReset();
+        //        log("header height =" + mHeaderInitHeight);
+        //        headerReset();
     }
 
     private void mearsureHeader(ViewGroup header) {
         ViewGroup.LayoutParams p = header.getLayoutParams();
         int widthSpec = MeasureSpec.makeMeasureSpec(p.width, MeasureSpec.EXACTLY);
-        int heightSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
+        int heightSpec = MeasureSpec.makeMeasureSpec(p.height, MeasureSpec.EXACTLY);
         header.measure(widthSpec, heightSpec);
     }
 
@@ -160,23 +190,9 @@ public class RefreshRecyclerView extends RecyclerView {
     public void computeScroll() {
         super.computeScroll();
         if (mScroller.computeScrollOffset()) {
-            updateHeader(mScroller.getCurrY());
+            setHeaderHeight(mScroller.getCurrY());
             invalidate();
         }
     }
 
-
-    public int getScollYDistance() {
-        LinearLayoutManager layoutManager = (LinearLayoutManager) this.getLayoutManager();
-        int position = layoutManager.findFirstVisibleItemPosition();
-        View firstVisiableChildView = layoutManager.findViewByPosition(position);
-        int itemHeight = firstVisiableChildView.getHeight();
-        if (position == 0) {
-            return itemHeight;
-        } else if (position == 1) {
-            return 1 + mHeaderInitHeight;
-        } else {
-            return 1 + mHeaderInitHeight + (position - 2) * itemHeight - firstVisiableChildView.getTop();
-        }
-    }
 }

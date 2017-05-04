@@ -3,11 +3,10 @@ package com.project.gu.testnestedscrollingfirst.content.sinaweibo;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.text.InputType;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 
 import com.project.gu.testnestedscrollingfirst.R;
 
@@ -35,6 +34,7 @@ public class UserInfoActivity extends AppCompatActivity {
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 PageFragment curf = (PageFragment) adapter.getItem(vp.getCurrentItem());
                 final int bottom = curf.getTopViewBottom();
+                ...
                 if (bottom > 0) {
                     getTopView().setVisibility(View.VISIBLE);
                     getTopView().offsetTopAndBottom(bottom - getTopView().getBottom());
@@ -65,11 +65,14 @@ public class UserInfoActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                getTopView().setVisibility(View.INVISIBLE);
+                //                getTopView().setVisibility(View.INVISIBLE);
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
+                if (state == 0) {
+                    //                    getTopView().setVisibility(View.INVISIBLE);
+                }
             }
         });
     }
@@ -78,7 +81,7 @@ public class UserInfoActivity extends AppCompatActivity {
         int neighboursBottom = neighboursFragment.getTopViewBottom();
         int selfBottom = selfFragment.getTopViewBottom();
         int dy = neighboursBottom - selfBottom;
-        log("----needScrollBy dy= " + dy);
+        log("----needScrollBy dy= (" + dy + "),neighboursBottom= " + neighboursBottom + ",selfBottom= " + selfBottom);
         neighboursFragment.needScrollBy(dy);
     }
 

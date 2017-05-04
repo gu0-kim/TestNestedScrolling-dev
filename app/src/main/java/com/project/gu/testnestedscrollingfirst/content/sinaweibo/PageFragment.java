@@ -94,12 +94,11 @@ public class PageFragment extends Fragment {
 
     public int getTopViewBottom() {
         LinearLayoutManager layoutManager = (LinearLayoutManager) rv.getLayoutManager();
-        View firstVisibItem = rv.getChildAt(0);
+        View firstVisibleItem = rv.getChildAt(0);
         int firstItemPosition = layoutManager.findFirstVisibleItemPosition();
-        if (firstItemPosition == 1) {
-            return layoutManager.getDecoratedBottom(firstVisibItem);
-        } else if (firstItemPosition == 0) {
-            return layoutManager.getDecoratedBottom(firstVisibItem) + headerHeight;
+        int dbottom = layoutManager.getDecoratedBottom(firstVisibleItem);
+        if (firstItemPosition == 0) {
+            return dbottom;
         } else {
             return 0;
         }
@@ -113,51 +112,4 @@ public class PageFragment extends Fragment {
             }
         }
     }
-
-    class Radapter extends RecyclerView.Adapter {
-        private static final int HEADER = 0;
-        private static final int ITEM = 1;
-
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            if (viewType == HEADER) {
-                return new HeaderHolder(LayoutInflater.from(getContext()).inflate(R.layout.userinfo_header_layout, parent, false));
-            } else {
-                return new ItemHolder(LayoutInflater.from(getContext()).inflate(R.layout.rv_item, parent, false));
-            }
-        }
-
-        @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            if (position != 0) {
-                TextView tv = (TextView) holder.itemView;
-                tv.setText(list.get(position - 1));
-            }
-        }
-
-        @Override
-        public int getItemViewType(int position) {
-            if (position == 0)
-                return HEADER;
-            return ITEM;
-        }
-
-        @Override
-        public int getItemCount() {
-            return list.size() + 1;
-        }
-    }
-
-    private class HeaderHolder extends RecyclerView.ViewHolder {
-        HeaderHolder(View itemView) {
-            super(itemView);
-        }
-    }
-
-    private class ItemHolder extends RecyclerView.ViewHolder {
-        ItemHolder(View itemView) {
-            super(itemView);
-        }
-    }
-
 }

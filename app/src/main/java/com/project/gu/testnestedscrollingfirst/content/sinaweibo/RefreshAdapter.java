@@ -20,9 +20,9 @@ public class RefreshAdapter extends RecyclerView.Adapter {
     private List<String> list;
     private Context mContext;
     private RefreshRecyclerView rv;
-    private static final int HEADERCOUNT = 2;
+    private static final int HEADERCOUNT = 1;
     private static final int HEADERTYPE = 0;
-    private static final int HEADERIMGTYPE = 2;
+    //    private static final int HEADERIMGTYPE = 2;
     private static final int ITEMTYPE = 1;
 
     public RefreshAdapter(Context context, List<String> list, RefreshRecyclerView rv) {
@@ -37,15 +37,13 @@ public class RefreshAdapter extends RecyclerView.Adapter {
             return new Holder(rv.getRefreshHeader());
         } else if (viewType == ITEMTYPE) {
             return new Holder(LayoutInflater.from(mContext).inflate(R.layout.rv_item, parent, false));
-        } else if (viewType == HEADERIMGTYPE) {
-            return new Holder(LayoutInflater.from(mContext).inflate(R.layout.userinfo_header_layout, parent, false));
         }
         return null;
     }
 
     @Override
     public int getItemViewType(int position) {
-        return position == 0 ? HEADERTYPE : position == 1 ? HEADERIMGTYPE : ITEMTYPE;
+        return position == 0 ? HEADERTYPE : ITEMTYPE;
     }
 
     @Override
