@@ -71,6 +71,7 @@ public class RefreshRecyclerView extends RecyclerView {
                     mIsRecord = false;
                     break;
                 }
+                
                 if (Math.abs(offsetY) > Math.abs(offsetX)) {
                     if (Math.abs(offsetY) > mTouchslop) {
                         getParent().requestDisallowInterceptTouchEvent(true);
