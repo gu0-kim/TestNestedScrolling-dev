@@ -34,7 +34,6 @@ public class UserInfoActivity extends AppCompatActivity {
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 PageFragment curf = (PageFragment) adapter.getItem(vp.getCurrentItem());
                 final int bottom = curf.getTopViewBottom();
-                ...
                 if (bottom > 0) {
                     getTopView().setVisibility(View.VISIBLE);
                     getTopView().offsetTopAndBottom(bottom - getTopView().getBottom());
