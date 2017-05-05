@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">AppbarSpring</string>
+    <string name="appbar_pull_behavior">android.support.design.widget.AppBarLayoutSpringBehavior</string>
+    <string name="appbar_fling_fix_behavior">android.support.design.widget.AppBarFlingFixBehavior</string>
+</resources>
