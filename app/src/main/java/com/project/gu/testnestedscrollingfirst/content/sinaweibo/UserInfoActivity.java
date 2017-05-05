@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 
 import com.project.gu.testnestedscrollingfirst.R;
 
@@ -44,10 +43,12 @@ public class UserInfoActivity extends AppCompatActivity {
                     final int rPos = vp.getCurrentItem() + 1;
                     if (lPos >= 0) {
                         PageFragment lf = (PageFragment) adapter.getItem(lPos);
+                        log("left-----pos= " + lPos);
                         scrollNeighbours(lf, curf);
                     }
                     if (rPos < 4) {
                         PageFragment rf = (PageFragment) adapter.getItem(rPos);
+                        log("right-----pos= " + rPos);
                         scrollNeighbours(rf, curf);
                     }
                     startScroll = false;
