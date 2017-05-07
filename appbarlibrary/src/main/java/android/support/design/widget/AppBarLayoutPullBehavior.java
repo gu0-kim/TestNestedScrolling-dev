@@ -14,7 +14,7 @@ import android.view.animation.Interpolator;
 import java.lang.reflect.Field;
 import java.util.List;
 
-public class AppBarLayoutSpringBehavior extends AppBarLayout.Behavior {
+public class AppBarLayoutPullBehavior extends AppBarLayout.Behavior {
     private static final int MAX_OFFSET_ANIMATION_DURATION = 600; // ms
 
     public interface SpringOffsetCallback {
@@ -30,17 +30,23 @@ public class AppBarLayoutSpringBehavior extends AppBarLayout.Behavior {
     private SpringOffsetCallback mSpringOffsetCallback;
 
     private ValueAnimatorCompat mOffsetAnimator;
+    private int maxScrollY;
 
-    public AppBarLayoutSpringBehavior() {
+    public AppBarLayoutPullBehavior() {
     }
 
-    public AppBarLayoutSpringBehavior(Context context, AttributeSet attrs) {
+    public AppBarLayoutPullBehavior(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
     @Override
     public boolean onStartNestedScroll(CoordinatorLayout parent, AppBarLayout child, View directTargetChild, View target, int nestedScrollAxes) {
+        /**
+         * directTargetChild is viewpager
+         * target is recyclerview
+         */
         final boolean started = (nestedScrollAxes & ViewCompat.SCROLL_AXIS_VERTICAL) != 0 && child.hasScrollableChildren() && parent.getHeight() - directTargetChild.getHeight() <= child.getHeight();
+        //        Log.e("tag", "onStartNestedScroll started= " + started);
         if (started && mOffsetAnimator != null) {
             mOffsetAnimator.cancel();
         }
@@ -49,6 +55,9 @@ public class AppBarLayoutSpringBehavior extends AppBarLayout.Behavior {
             mSpringRecoverAnimator.cancel();
         }
 
+        if (maxScrollY == 0) {
+            maxScrollY = DimenUtils.getActionBarHeight(child.getContext()) + DimenUtils.getStatusBarHeight(child.getContext()) - child.getHeight();
+        }
         // A new nested scroll has started so clear out the previous ref
         setLastNestedScrollingChildRef();
         return started;
@@ -73,21 +82,27 @@ public class AppBarLayoutSpringBehavior extends AppBarLayout.Behavior {
     @Override
     public boolean onNestedFling(final CoordinatorLayout coordinatorLayout, final AppBarLayout child, View target, float velocityX, float velocityY, boolean consumed) {
         boolean flung = false;
-
+        Log.e("tag", "onNestedFling: velocityY= " + velocityY);
+        velocityY = velocityY / 4;
         if (!consumed) {
             flung = fling(coordinatorLayout, child, -child.getTotalScrollRange(), 0, -velocityY);
+            Log.e("tag", "onNestedFling: NO consumed!");
         } else {
             if (velocityY < 0) {
                 final int targetScroll = +child.getDownNestedPreScrollRange();
                 animateOffsetTo(coordinatorLayout, child, targetScroll, velocityY);
                 flung = true;
+                Log.e("TAG", "onNestedFling: velocityY < 0");
             } else {
-                final int targetScroll = -child.getUpNestedPreScrollRange();
+                //caution ! maxScrollY is (openDis - collapseDis) 
+                final int targetScroll = Math.max(-child.getUpNestedPreScrollRange(), maxScrollY);
                 if (getTopBottomOffsetForScrollingSibling() > targetScroll) {
                     animateOffsetTo(coordinatorLayout, child, targetScroll, velocityY);
                     flung = true;
                 }
+                Log.e("TAG", "onNestedFling: velocityY > 0");
             }
+            Log.e("tag", "consumed ,flung= " + flung);
         }
 
         setWasNestedFlung(flung);
@@ -112,7 +127,7 @@ public class AppBarLayoutSpringBehavior extends AppBarLayout.Behavior {
     private void animateRecoverBySpring(final CoordinatorLayout coordinatorLayout, final AppBarLayout abl) {
         if (mSpringRecoverAnimator == null) {
             mSpringRecoverAnimator = new ValueAnimator();
-            mSpringRecoverAnimator.setDuration(500);
+            mSpringRecoverAnimator.setDuration(600);
             mSpringRecoverAnimator.setInterpolator(new DecelerateInterpolator());
             mSpringRecoverAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
@@ -125,6 +140,7 @@ public class AppBarLayoutSpringBehavior extends AppBarLayout.Behavior {
                 mSpringRecoverAnimator.cancel();
             }
         }
+        Log.e("tag", "animateRecoverBySpring: mOffsetSpring = " + mOffsetSpring);
         mSpringRecoverAnimator.setIntValues(mOffsetSpring, 0);
         mSpringRecoverAnimator.start();
     }
@@ -255,14 +271,15 @@ public class AppBarLayoutSpringBehavior extends AppBarLayout.Behavior {
     int setHeaderTopBottomOffset(CoordinatorLayout coordinatorLayout, AppBarLayout appBarLayout, int newOffset, int minOffset, int maxOffset) {
         int originNew = newOffset;
         final int curOffset = getTopBottomOffsetForScrollingSibling();
-        Log.e("tag","----");
+        //        Log.e("tag", "curOffset= " + curOffset);
         int consumed = 0;
         if (mOffsetSpring != 0 && newOffset < 0) {
-            int newSpringOffset = mOffsetSpring + originNew;
+            int newSpringOffset = mOffsetSpring + originNew;//modify
             if (newSpringOffset < 0) {
                 newOffset = newSpringOffset;
                 newSpringOffset = 0;
             }
+            Log.e("tag", "setHeaderTopBottomOffset: 11111");
             updateSpringOffsetByscroll(coordinatorLayout, appBarLayout, newSpringOffset);
             consumed = getTopBottomOffsetForScrollingSibling() - originNew;
             if (newSpringOffset >= 0)

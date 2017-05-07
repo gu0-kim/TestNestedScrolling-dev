@@ -11,5 +11,6 @@
     <dimen name="drag_middlebar_height">40dp</dimen>
     <!--拖动开始刷新的最小距离-->
     <dimen name="drag_refresh_min_distance">48dp</dimen>
-    
+    <!--
+    <dimen name="toolbar_height">?attr/actionBarSize</dimen>-->
 </resources>
