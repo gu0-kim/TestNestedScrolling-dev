@@ -21,7 +21,7 @@ public class AppBarLayoutPullBehavior extends AppBarLayout.Behavior {
     public interface SpringOffsetCallback {
         void springCallback(int offset);
     }
-
+//
     private int mOffsetDelta;
 
     private int mOffsetSpring;
