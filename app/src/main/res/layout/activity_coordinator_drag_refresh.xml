@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
+    android:id="@+id/coordinatorlayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -13,6 +14,7 @@
         android:layout_height="@dimen/app_bar_height"
         android:fitsSystemWindows="true"
         android:theme="@style/AppTheme.PopupOverlay"
+        app:elevation="0dp"
         app:layout_behavior="@string/appbar_pull_behavior">
 
         <android.support.design.widget.CollapsingToolbarLayout
@@ -20,21 +22,35 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            app:contentScrim="#ffffff"
+            app:contentScrim="#f9f9f9"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <ImageView
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fitsSystemWindows="true"
-                android:scaleType="centerCrop"
-                android:src="@mipmap/visitor_me_cover"
-                app:layout_collapseMode="parallax"/>
+                app:layout_collapseMode="parallax">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fitsSystemWindows="true"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/visitor_me_cover"/>
+
+                <ImageView
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="60dp"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/ic_launcher_round"/>
+            </RelativeLayout>
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
+                android:layout_height="@dimen/top_action_bar_height"
+                app:contentInsetStartWithNavigation="0dp"
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/AppTheme.AppBarOverlay">
 
@@ -44,17 +60,19 @@
 
                     <ImageView
                         android:id="@+id/moreImg"
-                        android:layout_width="?attr/actionBarSize"
+                        android:layout_width="@dimen/top_action_bar_height"
                         android:layout_height="match_parent"
                         android:layout_alignParentRight="true"
+                        android:padding="4dp"
                         android:scaleType="centerInside"
                         android:src="@drawable/top_more_bg"/>
 
                     <ImageView
                         android:id="@+id/searchImg"
-                        android:layout_width="?attr/actionBarSize"
+                        android:layout_width="@dimen/top_action_bar_height"
                         android:layout_height="match_parent"
                         android:layout_toLeftOf="@id/moreImg"
+                        android:padding="4dp"
                         android:scaleType="centerInside"
                         android:src="@drawable/nav_search_level"/>
                 </RelativeLayout>
@@ -62,6 +80,7 @@
         </android.support.design.widget.CollapsingToolbarLayout>
 
     </android.support.design.widget.AppBarLayout>
+
 
     <android.support.v4.view.ViewPager
         android:id="@+id/tabs_viewpager"
@@ -72,8 +91,14 @@
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:layout_scrollFlags="scroll|enterAlways"/>
+            android:layout_height="@dimen/top_action_bar_height"
+            android:background="@drawable/tab_bg"
+            app:tabGravity="center"
+            app:tabIndicatorColor="#f48223"
+            app:tabMode="fixed"
+            app:tabSelectedTextColor="#919191"
+            app:tabTextColor="#a3a3a3"/>
+
     </android.support.v4.view.ViewPager>
 
 </android.support.design.widget.CoordinatorLayout>

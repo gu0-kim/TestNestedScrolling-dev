@@ -1,6 +1,10 @@
 package com.project.gu.testnestedscrollingfirst.content.coordinator;
 
+import android.content.Context;
 import android.support.v7.widget.Toolbar;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 
 import com.project.gu.testnestedscrollingfirst.R;
@@ -12,6 +16,7 @@ import com.project.gu.testnestedscrollingfirst.R;
 public class ToolbarStateHelper {
     private Toolbar mToolbar;
     private ImageView searchImg, moreImg;
+    private Animation mRotateAnimation;
 
     public void setState(ToolBarState state) {
         mState = state;
@@ -50,6 +55,7 @@ public class ToolbarStateHelper {
     public void toggleProgressBar(ToolBarState state) {
         if (mState == ToolBarState.OPEN || mState == ToolBarState.CLOSED) {
             moreImg.getDrawable().setLevel(state == ToolBarState.CLOSED ? 2 : 0);
+            rotationImageView(moreImg, 0);
             mState = state;
         }
     }
@@ -62,7 +68,7 @@ public class ToolbarStateHelper {
             mState = ToolBarState.OPEN;
         } else if (offset > 0 && offset < NEED_ROTATE_DY) {
             moreImg.getDrawable().setLevel(1);
-            rotationImageView(moreImg, 0);
+            //            rotationImageView(moreImg, 0);
             mState = ToolBarState.PULL;
         } else if (offset >= NEED_ROTATE_DY) {
             moreImg.getDrawable().setLevel(1);
@@ -77,7 +83,7 @@ public class ToolbarStateHelper {
 
 
     private int calDegree(int offset) {
-        return (int) ((NEED_ROTATE_DY - (float) offset) / NEED_ROTATE_DY * 360);
+        return (int) ((NEED_ROTATE_DY - (float) offset) / NEED_ROTATE_DY * 360) * 2;
     }
 
     private void rotationImageView(ImageView pb, int degree) {
@@ -86,4 +92,14 @@ public class ToolbarStateHelper {
         pb.setRotation(degree);
     }
 
+    public void startAnimation(Context context) {
+        if (mRotateAnimation == null) {
+            mRotateAnimation = AnimationUtils.loadAnimation(context, R.anim.pb_rotate_anim);
+        }
+        moreImg.startAnimation(mRotateAnimation);
+    }
+
+    public void stopAnimation() {
+        moreImg.clearAnimation();
+    }
 }

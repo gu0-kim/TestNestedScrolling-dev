@@ -55,9 +55,9 @@ public class AppBarOffsetChangedListener implements AppBarLayout.OnOffsetChanged
 
     private void initDefault() {
         mScrimAnimationDuration = DEFAULT_SCRIM_ANIMATION_DURATION;
-        mCollapseTabBackgroundColor = Color.parseColor("#ffffff");//#3F51B5
-        mCollapseTabNormalTextColor = Color.parseColor("#555555");
-        mCollapseTabSelectTextColor = Color.parseColor("#FF4081");
+        mCollapseTabBackgroundColor = Color.parseColor("#3F51B5");//#3F51B5
+        mCollapseTabNormalTextColor = Color.parseColor("#f8f8f8");
+        mCollapseTabSelectTextColor = Color.parseColor("#919191");
     }
 
     @Override
@@ -65,7 +65,7 @@ public class AppBarOffsetChangedListener implements AppBarLayout.OnOffsetChanged
         if (mCollapsedHeight == 0) {
             mCollapsedHeight = appBarLayout.getTotalScrollRange();
         }
-        setScrimsShown(isCollapsed(verticalOffset));
+//        setScrimsShown(isCollapsed(verticalOffset));
         mHelper.changeNavCollapsedState(getCollapsedState(verticalOffset));
         mHelper.toggleSearch(getCollapsedState(verticalOffset));
         mHelper.toggleProgressBar(getCollapsedState(verticalOffset));

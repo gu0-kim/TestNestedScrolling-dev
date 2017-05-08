@@ -16,6 +16,7 @@ import java.util.List;
 
 public class AppBarLayoutPullBehavior extends AppBarLayout.Behavior {
     private static final int MAX_OFFSET_ANIMATION_DURATION = 600; // ms
+    private static final int MAX_PULL_OFFSET = 180;//下拉最大距离(单位px)
 
     public interface SpringOffsetCallback {
         void springCallback(int offset);
@@ -443,6 +444,9 @@ public class AppBarLayoutPullBehavior extends AppBarLayout.Behavior {
 
     private void updateSpringHeaderHeight(CoordinatorLayout coordinatorLayout, AppBarLayout appBarLayout, int offset) {
         if (appBarLayout.getHeight() < mPreHeadHeight || offset < 0)
+            return;
+        offset = Math.min(MAX_PULL_OFFSET, offset);
+        if (offset == mOffsetSpring)
             return;
         mOffsetSpring = offset;
         if (mSpringOffsetCallback != null)
