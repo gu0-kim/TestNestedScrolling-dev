@@ -22,10 +22,15 @@
         <activity android:name=".content.horizontaldrag.HorizontalDragMainActivity">
         </activity>
         <activity android:name=".content.sinaweibo.UserInfoActivity">
+
         </activity>
         <activity android:name=".content.sinaweibo.PullRefreshActivity">
         </activity>
         <activity android:name=".content.coordinator.CoordinatorDragRefreshActivity">
+        </activity>
+        <activity android:name=".content.scrollview.NestedScrollActivity">
+        </activity>
+        <activity android:name=".content.scrollview.MultiScrollView">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
