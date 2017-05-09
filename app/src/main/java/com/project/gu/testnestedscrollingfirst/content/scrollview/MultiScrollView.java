@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.widget.ScrollView;
 
 import com.project.gu.testnestedscrollingfirst.R;
-
 public class MultiScrollView extends AppCompatActivity {
 
     MyScrollView datasv;
