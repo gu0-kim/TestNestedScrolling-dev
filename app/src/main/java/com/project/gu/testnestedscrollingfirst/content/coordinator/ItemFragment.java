@@ -13,7 +13,7 @@ import com.project.gu.testnestedscrollingfirst.R;
 
 public class ItemFragment extends Fragment {
 
-    private RecyclerView recyclerView;
+    private MyRecyclerView recyclerView;
 
     public static ItemFragment newInstance() {
         ItemFragment fragment = new ItemFragment();
@@ -25,7 +25,7 @@ public class ItemFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_item_list, container, false);
-        recyclerView = (RecyclerView) view;
+        recyclerView = (MyRecyclerView) view;
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(new MyItemRecyclerViewAdapter(DummyContent.ITEMS));
         return view;
@@ -34,5 +34,9 @@ public class ItemFragment extends Fragment {
     public void refresh() {
         if (recyclerView != null)
             ((LinearLayoutManager) recyclerView.getLayoutManager()).scrollToPositionWithOffset(0, 0);
+    }
+
+    public void modifyScroll() {
+        recyclerView.modifyScroll();
     }
 }

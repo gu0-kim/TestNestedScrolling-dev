@@ -21,7 +21,8 @@ public class AppBarLayoutPullBehavior extends AppBarLayout.Behavior {
     public interface SpringOffsetCallback {
         void springCallback(int offset);
     }
-//
+
+    //
     private int mOffsetDelta;
 
     private int mOffsetSpring;
@@ -47,7 +48,7 @@ public class AppBarLayoutPullBehavior extends AppBarLayout.Behavior {
          * target is recyclerview
          */
         final boolean started = (nestedScrollAxes & ViewCompat.SCROLL_AXIS_VERTICAL) != 0 && child.hasScrollableChildren() && parent.getHeight() - directTargetChild.getHeight() <= child.getHeight();
-        //        Log.e("tag", "onStartNestedScroll started= " + started);
+        Log.e("tag", "onStartNestedScroll started= " + started);
         if (started && mOffsetAnimator != null) {
             mOffsetAnimator.cancel();
         }

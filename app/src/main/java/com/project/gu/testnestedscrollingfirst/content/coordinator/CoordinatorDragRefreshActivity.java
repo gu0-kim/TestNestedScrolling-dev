@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MotionEvent;
+import android.view.View;
 
 import com.project.gu.testnestedscrollingfirst.R;
 
@@ -31,7 +32,7 @@ public class CoordinatorDragRefreshActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("");
         toolbar.setNavigationIcon(R.drawable.nav_back_level_bg);
-        
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mHelper = new ToolbarStateHelper(toolbar);
@@ -47,10 +48,28 @@ public class CoordinatorDragRefreshActivity extends AppCompatActivity {
             }
         });
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.tabs_viewpager);
+        final ViewPager viewPager = (ViewPager) findViewById(R.id.tabs_viewpager);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         mPageAdapter = new TabFragmentPagerAdapter(getSupportFragmentManager());
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                if (state == ViewPager.SCROLL_STATE_IDLE) {
+                    ((ItemFragment) mPageAdapter.getItem(viewPager.getCurrentItem())).modifyScroll();
+                }
+            }
+        });
         viewPager.setAdapter(mPageAdapter);
         AppBarOffsetChangedListener offsetChangedListener = new AppBarOffsetChangedListener(tabLayout, collapsingToolbarLayout, mHelper);
         appBarLayout.addOnOffsetChangedListener(offsetChangedListener);
